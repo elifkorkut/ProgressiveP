@@ -1,0 +1,11 @@
+{
+  "gameId": "plinko",
+  "version": "1.0.0",
+  "initialCoins": 200,
+  "defaultBet": 1000,
+  "minBet": 100,
+  "maxBet": 10000,
+  "durationInSeconds": 900,
+  "defaultRows": 8,
+  "defaultRisk": 1
+}

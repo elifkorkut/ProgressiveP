@@ -1,2 +1,6 @@
 ﻿<Solution>
+  <Project Path="UI.csproj" />
+  <Project Path="Backend.csproj" />
+  <Project Path="Core.csproj" />
+  <Project Path="Logic.csproj" />
 </Solution>

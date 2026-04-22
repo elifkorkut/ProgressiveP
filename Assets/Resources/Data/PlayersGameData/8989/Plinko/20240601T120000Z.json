@@ -1,0 +1,65 @@
+
+{  "remainingBalls": 5,
+   "openedAt": "2024-06-01T12:00:00Z",
+   "state": "active",
+   "history": [ 0,-200,1000 ],
+   "lastLevel": 1,
+   "ballsDroppedInLevel": 0,
+   "code": "20240601T120000Z",
+   "gameFileVersion": "1",
+   "rows": 9,
+   "durationInSeconds": 900,
+  
+   "balls": [ 1, 2, 3, 4, 5 ],
+   
+   "levels": [
+    {
+      "multipliers": [ 3.0, 1.4, 1.1, 1.0, 0.5, 1.0, 1.1, 1.4, 3.0],
+      "ballsToNextLevel": 25
+    },
+    
+    {
+       "multipliers": [ 5.6, 2.1, 1.1, 1.0, 0.5, 1.0, 1.1, 2.1, 5.6 ],
+      "ballsToNextLevel": 30
+    },
+
+     {
+      
+      "multipliers": [  10.0, 3.0, 0.9, 0.3, 0.2, 0.3, 0.9, 3.0, 10.0],
+      "ballsToNextLevel": 20
+    },
+
+
+    {
+      
+      "multipliers": [ 13.0, 3.0, 1.3, 0.7, 0.4, 0.7, 1.3, 3.0, 13.0 ],
+      "ballsToNextLevel": 30
+    },
+
+    {
+      
+      "multipliers": [ 22.0, 5.0, 2.0, 1.4, 0.6, 0.4, 0.6, 1.4, 2.0, 5.0, 22.0 ],
+      "ballsToNextLevel": 20
+    },
+
+    {
+      "multipliers": [ 29.0, 4.0, 1.5, 0.3, 0.2, 0.3, 1.5, 4.0, 29.0 ],
+      "ballsToNextLevel": 25
+    },
+    
+    {
+       "multipliers": [ 33.0, 4.0, 2.0, 1.1, 0.6, 1.1, 2.0, 4.0, 33.0 ],
+      "ballsToNextLevel": 20
+    },
+    
+    {
+      
+      "rows": 9,
+      "multipliers": [ 58.0, 15.0, 0.7, 0.4, 0.2, 0.4, 0.7, 15.0, 58.0 ],
+      "ballsToNextLevel": 15
+    } ]
+
+}
+
+
+
