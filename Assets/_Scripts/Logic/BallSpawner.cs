@@ -1,6 +1,5 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
+using ProgressiveP.Core;
 
 namespace ProgressiveP.Logic
 {   
@@ -29,23 +28,52 @@ public class BallSpawner : MonoBehaviour
 
     public void SpawnBall(float betAmount)
     {
-        GameObject ballObj;
+        // Require Active state 
+        if (GameStateController.Instance == null || !GameStateController.Instance.IsActive)
+        {
+            Debug.Log("[BallSpawner] Spawn blocked: game not in Active state.");
+            return;
+        }
 
+        // Require remaining session balls
+        if (ServiceLocator.TryGet<GameSessionManager>(out var gsmCheck) && gsmCheck.RemainingBalls <= 0)
+        {
+            Debug.Log("[BallSpawner] Spawn blocked: no balls remaining.");
+            return;
+        }
+
+        GameObject ballObj;
         if (BallPool.Instance != null)
         {
-            // Pool path — zero allocation
             ballObj = BallPool.Instance.Get();
             ballObj.transform.SetParent(transform);
         }
         else
         {
-            // Fallback for scenes without a BallPool component
             ballObj = Instantiate(ball, transform);
         }
 
         ballObj.transform.localPosition = Vector3.zero;
-        ballObj.GetComponent<PlinkoBall>().Setup(increment, betAmount);
+
+        var plinkoBall = ballObj.GetComponent<PlinkoBall>();
+        plinkoBall.Setup(increment, betAmount);
+
+        // sequential index + pre-calculated target
+        if (ServiceLocator.TryGet<GameSessionManager>(out var gsm))
+        {
+            int ballIndex    = gsm.GetAndIncrementBallIndex();
+            int targetBucket = gsm.GetTargetBucketIndex(ballIndex);
+
+            plinkoBall.AssignIndex(ballIndex);
+
+            if (targetBucket >= 0 && ServiceLocator.TryGet<GameBuilder>(out var builder))
+            {
+                var basketTx = builder.GetBasketTransform(targetBucket);
+                plinkoBall.AssignTarget(targetBucket, basketTx);
+            }
+
+            gsm.OnBallSpawned(ballIndex);
+        }
     }
 }
-
 }

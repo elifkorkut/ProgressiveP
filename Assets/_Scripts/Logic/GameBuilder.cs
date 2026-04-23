@@ -23,7 +23,7 @@ public class GameBuilder : MonoBehaviour
 
     private float _increment;
 
-    // Cached so UpdateBaskets can reach them without finding children
+
     private CollectionBasket[] _currentBaskets;
 
     private void Awake()
@@ -86,7 +86,7 @@ public class GameBuilder : MonoBehaviour
         Debug.Log($"[GameBuilder] Baskets updated for level — rows: {rows}");
     }
 
-    // ── Board construction ────────────────────────────────────────────────────
+    //Board construction
 
     private void BuildBoard(int rows, float[] multipliers)
     {
@@ -175,6 +175,16 @@ public class GameBuilder : MonoBehaviour
         for (int i = 0; i < count; i++)
             mults[i] = 1f;
         return mults;
+    }
+
+    public Transform GetBasketTransform(int bucketIndex)
+    {
+        if (bucketIndex < 0 || bucketIndex >= _currentBaskets.Length)
+        {
+            Debug.LogWarning($"[GameBuilder] GetBasketTransform: invalid bucket index {bucketIndex}");
+            return null;
+        }
+        return _currentBaskets[bucketIndex].transform;
     }
 }
 }
