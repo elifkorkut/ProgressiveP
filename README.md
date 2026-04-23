@@ -3,6 +3,7 @@
 
 I tried developed a scalable, server-authoritative architecture with a strong emphasis on decoupling and data integrity. The system leverages optimistic UI handling to ensure seamless transitions and responsive interface updates, while also utilizing local caching (PlayerPrefs) to preserve state in case of crashes. At the same time, it enforces strict backend validation for all session results and reward distribution. The design also supports straightforward migration and future extensibility.
 
+Note: Each level initializes with a starting pool of 200 balls, as defined by the configuration data. While every ball carries a standard cost specified in the config, the balance is permitted to drop into negative values for testing purposes.
 
 https://github.com/user-attachments/assets/c2733c9e-b706-471d-99c6-94d03c15d8fb
 
