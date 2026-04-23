@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 using ProgressiveP.Core;
@@ -10,39 +11,87 @@ public class HistoryPanel : MonoBehaviour
     [SerializeField] private Transform contentParent;
     [SerializeField] private int maxVisibleEntries = 25;
 
-    
-    private readonly Queue<GameObject> _entries = new Queue<GameObject>(26);
+    private readonly Queue<HistoryEntryUI> _entries = new Queue<HistoryEntryUI>(26);
+    private readonly Stack<HistoryEntryUI> _entryPool = new Stack<HistoryEntryUI>(26);
+
+    private void Awake()
+    {
+        // Pre-warm 
+        if (historyEntryPrefab == null || contentParent == null) return;
+        for (int i = 0; i < maxVisibleEntries; i++)
+        {
+            var go = Instantiate(historyEntryPrefab, contentParent);
+            go.SetActive(false);
+            var ui = go.GetComponent<HistoryEntryUI>();
+            if (ui != null) _entryPool.Push(ui);
+        }
+    }
+
     private void OnEnable()
     {
-        //RewardBatchQueue.OnRewardsConfirmed += HandleRewardsConfirmed;
+        CollectionBasket.EarnedCoins       += HandleBasketHit;
+        GameSessionManager.OnHistoryLoaded += HandleHistoryLoaded;
     }
 
     private void OnDisable()
     {
-        //RewardBatchQueue.OnRewardsConfirmed -= HandleRewardsConfirmed;
+        CollectionBasket.EarnedCoins       -= HandleBasketHit;
+        GameSessionManager.OnHistoryLoaded -= HandleHistoryLoaded;
     }
 
-    // ── Internal ──────────────────────────────────────────────────────────────
 
-    private void HandleRewardsConfirmed(RewardRecord[] rewards)
+
+    private void HandleHistoryLoaded(RewardRecord[] records)
     {
-        // Traverse in reverse so the last-confirmed reward ends up on top
-        for (int i = rewards.Length - 1; i >= 0; i--)
-            AddEntry(rewards[i]);
+       
+        foreach (var r in records)
+            AddEntry(r);
+    }
+
+    private void HandleBasketHit(object sender, CollectionBasket.OnBasketHit args)
+    {
+        var record = new RewardRecord
+        {
+            bucketIndex          = args.bucketIndex,
+            betAmount            = args.betAmount,
+            multiplier           = args.factor,
+            payout               = (int)args.winnings,
+            serverTimestampTicks = DateTime.UtcNow.Ticks
+        };
+        AddEntry(record);
     }
 
     private void AddEntry(RewardRecord record)
     {
-        if (historyEntryPrefab == null || contentParent == null) return;
+        if (contentParent == null) return;
 
-        var entry = Instantiate(historyEntryPrefab, contentParent);
+        // Get a pooled entry or instantiate a new one if the pool is empty.
+        HistoryEntryUI entry;
+        if (_entryPool.Count > 0)
+        {
+            entry = _entryPool.Pop();
+        }
+        else
+        {
+            if (historyEntryPrefab == null) return;
+            var go = Instantiate(historyEntryPrefab, contentParent);
+            entry = go.GetComponent<HistoryEntryUI>();
+            if (entry == null) return;
+        }
+
+        entry.transform.SetParent(contentParent, false);
         entry.transform.SetAsFirstSibling();
-        entry.GetComponent<HistoryEntryUI>()?.Setup(record);
+        entry.gameObject.SetActive(true);
+        entry.Setup(record);
         _entries.Enqueue(entry);
 
-        // Trim oldest entries to keep the layout responsive
+        // Return oldest entries to pool once the visible cap is exceeded.
         while (_entries.Count > maxVisibleEntries)
-            Destroy(_entries.Dequeue());
+        {
+            var evicted = _entries.Dequeue();
+            evicted.gameObject.SetActive(false);
+            _entryPool.Push(evicted);
+        }
     }
 }
 

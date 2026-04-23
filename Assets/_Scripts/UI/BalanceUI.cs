@@ -2,13 +2,6 @@ using TMPro;
 using UnityEngine;
 using ProgressiveP.Core;
 using ProgressiveP.Logic;
-
-/// <summary>
-/// Displays the player's coin balance.
-/// On session load: reads balance from DataKeeperServer.playerData.
-/// Listens to DataReader.OnPlayerDataLoaded for any subsequent updates
-/// (e.g. after a save/reload cycle).
-/// </summary>
 public class BalanceUI : MonoBehaviour
 {
     [SerializeField] private TextMeshProUGUI balanceText;
@@ -16,18 +9,18 @@ public class BalanceUI : MonoBehaviour
 
     private void OnEnable()
     {
-        DataReader.OnPlayerDataLoaded += HandlePlayerDataLoaded;
+        
+        GameSessionManager.OnBalanceChanged += SetBalance;
 
-        if (ServiceLocator.TryGet<GameSessionManager>(out var mgr))
-            mgr.onSessionLoaded += HandleSessionLoaded;
+        DataReader.OnPlayerDataLoaded       += HandlePlayerDataLoaded;
+        GameSessionManager.OnSessionLoaded  += HandleSessionLoaded;
     }
 
     private void OnDisable()
     {
-        DataReader.OnPlayerDataLoaded -= HandlePlayerDataLoaded;
-
-        if (ServiceLocator.TryGet<GameSessionManager>(out var mgr))
-            mgr.onSessionLoaded -= HandleSessionLoaded;
+        GameSessionManager.OnBalanceChanged -= SetBalance;
+        DataReader.OnPlayerDataLoaded       -= HandlePlayerDataLoaded;
+        GameSessionManager.OnSessionLoaded  -= HandleSessionLoaded;
     }
 
     private void HandleSessionLoaded()

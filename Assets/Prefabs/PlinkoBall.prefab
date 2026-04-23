@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 2933014512130830466}
   - component: {fileID: 2310425183636213232}
   m_Layer: 6
-  m_Name: DropBall
+  m_Name: PlinkoBall
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -110,8 +110,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d1df667e276134ab6915c4b533900f11, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Logic::BallScript
-  forcemode: 1
   thrust: 2
+  snapThreshold: 0.05
 --- !u!1 &8140661639208486300
 GameObject:
   m_ObjectHideFlags: 0

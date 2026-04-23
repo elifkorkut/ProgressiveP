@@ -19,6 +19,7 @@ public class StaticBall : MonoBehaviour
     private void Start() { }
 
    public void StartBop(){
+        
         animator.ResetTrigger("bop");
         animator.SetTrigger("bop");
 

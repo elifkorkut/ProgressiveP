@@ -1,6 +1,5 @@
 using UnityEngine;
 using UnityEngine.UI;
-using ProgressiveP.Logic;
 using ProgressiveP.Logic.Effects;
 public class PanelController : MonoBehaviour
 {

@@ -279,7 +279,7 @@ Camera:
   m_Enabled: 1
   serializedVersion: 2
   m_ClearFlags: 2
-  m_BackGroundColor: {r: 0.15018691, g: 0.18938568, b: 0.254717, a: 0}
+  m_BackGroundColor: {r: 0.043137256, g: 0.047058824, b: 0.14509805, a: 0}
   m_projectionMatrixMode: 1
   m_GateFitMode: 2
   m_FOVAxisMode: 0
@@ -304,7 +304,7 @@ Camera:
   far clip plane: 1000
   field of view: 34
   orthographic: 1
-  orthographic size: 5
+  orthographic size: 5.6
   m_Depth: -1
   m_CullingMask:
     serializedVersion: 2
@@ -329,7 +329,7 @@ Transform:
   m_GameObject: {fileID: 519420028}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: -10}
+  m_LocalPosition: {x: 0, y: 0.6, z: -10}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -374,6 +374,7 @@ MonoBehaviour:
     played: 0
     lastPlayedtick: 
     startedTick: 
+    sessionId: 
     state: 
 --- !u!4 &549612295
 Transform:
@@ -836,7 +837,36 @@ MonoBehaviour:
     played: 0
     lastPlayedtick: 
     startedTick: 
+    sessionId: 
     state: 
+  globalGameConfig:
+    gameId: 
+    version: 
+    initialCoins: 0
+    initialBalls: 0
+    defaultBet: 0
+    minBet: 0
+    maxBet: 0
+    durationInSeconds: 0
+    defaultRows: 0
+    defaultRisk: 0
+  activeSession:
+    sessionId: 
+    playerId: 
+    gameId: 
+    startTime: 
+    startTimeTicks: 0
+    state: 
+    gameConfig:
+      initialBalls: 0
+      defaultBet: 0
+      durationInSeconds: 0
+      numberOfLevels: 0
+      levels: []
+    currentLevelIndex: 0
+    totalBallsSpent: 0
+    ballsDroppedThisLevel: 0
+    rewardHistory: []
 --- !u!4 &1429296238
 Transform:
   m_ObjectHideFlags: 0

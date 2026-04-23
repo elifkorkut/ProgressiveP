@@ -3,7 +3,7 @@
    
     "initialBalls": 10,
     "defaultBet": 1000,
-    "durationInSeconds": 900,
+    "durationInSeconds": 60,
     "numberOfLevels": 8,
    
 

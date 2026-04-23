@@ -1,4 +1,4 @@
-
+using System;
 using UnityEngine;
 using UnityEngine.UI;
 using ProgressiveP.Logic.Effects;
@@ -38,7 +38,7 @@ public class StartScreenUI : MonoBehaviour
        {
               sessionManager.OnActiveSession+= HandleActiveSession;
               sessionManager.OnInactiveSession+= HandleInactiveSession;
-              sessionManager.onSessionLoaded += HandleActiveSessionLoaded;
+              GameSessionManager.OnSessionLoaded += HandleActiveSessionLoaded;
        }
     }
 
@@ -48,7 +48,7 @@ public class StartScreenUI : MonoBehaviour
        {
               sessionManager.OnActiveSession-= HandleActiveSession;
               sessionManager.OnInactiveSession-= HandleInactiveSession;
-              sessionManager.onSessionLoaded -= HandleActiveSessionLoaded;
+              GameSessionManager.OnSessionLoaded -= HandleActiveSessionLoaded;
        }
         
     }

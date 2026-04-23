@@ -1,0 +1,48 @@
+{
+  "initialBalls": 200,
+  "defaultBet": 100,
+  "durationInSeconds": 900,
+  "numberOfLevels": 8,
+  "levels": [
+    {
+      "rows": 8,
+      "multipliers": [ 2.0, 1.5, 1.1, 0.8, 0.5, 0.8, 1.1, 1.5, 2.0 ],
+      "ballsToNextLevel": 25
+    },
+    {
+      "rows": 8,
+      "multipliers": [ 4.0, 2.0, 1.1, 0.6, 0.4, 0.6, 1.1, 2.0, 4.0 ],
+      "ballsToNextLevel": 30
+    },
+    {
+      "rows": 8,
+      "multipliers": [ 9.0, 3.0, 1.0, 0.4, 0.3, 0.4, 1.0, 3.0, 9.0 ],
+      "ballsToNextLevel": 20
+    },
+    {
+      "rows": 8,
+      "multipliers": [ 15.0, 4.0, 1.2, 0.3, 0.2, 0.3, 1.2, 4.0, 15.0 ],
+      "ballsToNextLevel": 30
+    },
+    {
+      "rows":8,
+      "multipliers": [ 25.0, 2.0, 0.9, 0.3, 0.2, 0.3, 2.0, 6.0, 25.0 ],
+      "ballsToNextLevel": 20
+    },
+    {
+      "rows": 8,
+      "multipliers": [ 35.0, 5.0, 1.0, 0.3, 0.1, 0.3, 1.0, 5.0, 35.0 ],
+      "ballsToNextLevel": 25
+    },
+    {
+      "rows": 8,
+      "multipliers": [ 50.0, 8.0, 1.0, 0.2, 0.1, 0.2, 1.0, 8.0, 50.0 ],
+      "ballsToNextLevel": 20
+    },
+    {
+      "rows": 8,
+      "multipliers": [ 75.0, 12.0, 0.5, 0.2, 0.1, 0.2, 0.5, 12.0, 75.0 ],
+      "ballsToNextLevel": 15
+    }
+  ]
+}

@@ -1,9 +1,9 @@
 {
   "gameId": "plinko",
   "version": "1.0.0",
-  "initialCoins": 200,
-  "defaultBet": 1000,
-  "minBet": 100,
+  "initialBalls": 200,
+  "defaultBet": 100,
+  "minBet": 10,
   "maxBet": 10000,
   "durationInSeconds": 900,
   "defaultRows": 8,

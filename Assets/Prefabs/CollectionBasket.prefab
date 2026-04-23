@@ -219,6 +219,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Logic::CollectionBasket
   multiplierText: {fileID: 2255482074736451349}
+  floatingTextPrefab: {fileID: 8065665396339854724, guid: c79ff6cfd4837425ba4e626812c0d33a, type: 3}
   main: {fileID: 5633974704324546242}
   shadow: {fileID: 3735707292986275592}
 --- !u!1 &2153255061862375890

@@ -1,32 +1,39 @@
 using TMPro;
 using UnityEngine;
 using ProgressiveP.Logic;
-/// <summary>
-/// Displays the current level label (e.g. "Level 3") from the server schema.
-/// Subscribes to LevelProgressionTracker.OnLevelUp — no Update() cost.
-/// </summary>
+using ProgressiveP.Core;
+
 public class LevelLabelUI : MonoBehaviour
 {
     [SerializeField] private TextMeshProUGUI levelText;
 
     private void OnEnable()
     {
-        //LevelProgressionTracker.OnLevelUp += HandleLevelUp;
+        GameSessionManager.OnLevelUp       += HandleLevelUp;
+        GameSessionManager.OnSessionLoaded += HandleSessionLoaded;
     }
 
     private void OnDisable()
     {
-        //LevelProgressionTracker.OnLevelUp -= HandleLevelUp;
+        GameSessionManager.OnLevelUp       -= HandleLevelUp;
+        GameSessionManager.OnSessionLoaded -= HandleSessionLoaded;
     }
 
-    private void Start()
+    private void HandleSessionLoaded()
     {
-        // Populate on start if tracker is already ready
-       
+        int idx = GameSessionManager.Instance != null
+                  ? GameSessionManager.Instance.CurrentLevelIndex + 1
+                  : 1;
+        UpdateLabel($"Level {idx}");
     }
 
-    //private void HandleLevelUp(ProgressiveP.Core.LevelSchema schema)
-       // => UpdateLabel(schema.label);
+    private void HandleLevelUp(LevelConfig level)
+    {
+        int idx = GameSessionManager.Instance != null
+                  ? GameSessionManager.Instance.CurrentLevelIndex + 1
+                  : 1;
+        UpdateLabel($"Level {idx}");
+    }
 
     private void UpdateLabel(string label)
     {
