@@ -21,7 +21,7 @@ namespace ProgressiveP.Backend
 
             Instance = this;
             DontDestroyOnLoad(gameObject);
-            
+            _ = Initialize();
         }
 
         public async Task Initialize()
@@ -137,13 +137,7 @@ namespace ProgressiveP.Backend
             }
         }
 
-        /// <summary>
-        /// Creates a new game session:
-        ///   - fetches game config (levels + multipliers)
-        ///   - writes session JSON file
-        ///   - updates the player profile with the new game entry
-        /// Returns the session document JSON wrapped in BackendData.
-        /// </summary>
+    
         public async Task<BackendData> CreateSessionAsync(
             string playerId, string gameId,
             System.Action<string>      onError,
@@ -169,6 +163,86 @@ namespace ProgressiveP.Backend
                 onError?.Invoke($"Error creating session: {ex.Message}");
                 return null;
             }
+        }
+
+        public async Task<BackendData> ActivateSessionAsync(
+            string playerId, string gameId, string sessionId,
+            System.Action<string>      onError,
+            System.Action<BackendData> onSuccess)
+        {
+            if (!ServiceLocatorBackend.TryGet<ISessionService>(out var svc))
+            { onError?.Invoke("Session service not available."); return null; }
+            try
+            {
+                var r = await svc.ActivateSessionAsync(playerId, gameId, sessionId, onError, onSuccess);
+                return r.IsSuccess ? r.Data : null;
+            }
+            catch (System.Exception ex) { onError?.Invoke(ex.Message); return null; }
+        }
+
+        public async Task<BackendData> ValidateActiveSessionAsync(
+            string playerId, string gameId, string sessionId,
+            System.Action<string>      onError,
+            System.Action<BackendData> onSuccess)
+        {
+            if (!ServiceLocatorBackend.TryGet<ISessionService>(out var svc))
+            { onError?.Invoke("Session service not available."); return null; }
+            try
+            {
+                var r = await svc.ValidateActiveSessionAsync(playerId, gameId, sessionId, onError, onSuccess);
+                return r.IsSuccess ? r.Data : null;
+            }
+            catch (System.Exception ex) { onError?.Invoke(ex.Message); return null; }
+        }
+
+        public async Task<BackendData> GetLevelBallTargetsAsync(
+            string playerId, string gameId, string sessionId,
+            int levelIndex, int ballCount, float betPerBall,
+            System.Action<string>      onError,
+            System.Action<BackendData> onSuccess)
+        {
+            if (!ServiceLocatorBackend.TryGet<ISessionService>(out var svc))
+            { onError?.Invoke("Session service not available."); return null; }
+            try
+            {
+                var r = await svc.GetLevelBallTargetsAsync(playerId, gameId, sessionId,
+                                                           levelIndex, ballCount, betPerBall, onError, onSuccess);
+                return r.IsSuccess ? r.Data : null;
+            }
+            catch (System.Exception ex) { onError?.Invoke(ex.Message); return null; }
+        }
+
+        public async Task<BackendData> ProcessBallBatchAsync(
+            string playerId, string gameId, string sessionId,
+            int levelIndex, int[] ballIndices, float betPerBall,
+            System.Action<string>      onError,
+            System.Action<BackendData> onSuccess)
+        {
+            if (!ServiceLocatorBackend.TryGet<ISessionService>(out var svc))
+            { onError?.Invoke("Session service not available."); return null; }
+            try
+            {
+                var r = await svc.ProcessBallBatchAsync(playerId, gameId, sessionId,
+                                                        levelIndex, ballIndices, betPerBall, onError, onSuccess);
+                return r.IsSuccess ? r.Data : null;
+            }
+            catch (System.Exception ex) { onError?.Invoke(ex.Message); return null; }
+        }
+
+        public async Task<BackendData> UpdateSessionLevelAsync(
+            string playerId, string gameId, string sessionId,
+            int newLevelIndex,
+            System.Action<string>      onError,
+            System.Action<BackendData> onSuccess)
+        {
+            if (!ServiceLocatorBackend.TryGet<ISessionService>(out var svc))
+            { onError?.Invoke("Session service not available."); return null; }
+            try
+            {
+                var r = await svc.UpdateSessionLevelAsync(playerId, gameId, sessionId, newLevelIndex, onError, onSuccess);
+                return r.IsSuccess ? r.Data : null;
+            }
+            catch (System.Exception ex) { onError?.Invoke(ex.Message); return null; }
         }
     }
 }

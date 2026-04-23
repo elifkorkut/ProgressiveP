@@ -51,7 +51,8 @@ public struct PlayerData
     public struct GlobalGameConfig
     {   public string gameId;
         public string version;
-        public int initialCoins;
+        public int initialCoins;   // remove this later 
+        public int initialBalls;    
         public int defaultBet;
         public int minBet;
         public int maxBet;
@@ -87,7 +88,7 @@ public struct PlayerData
         public int   bucketIndex;
         public float betAmount;
         public float multiplier;          
-        public float payout;              // betAmount * multiplier, validated server-side
+        public int   payout;              // betAmount * multiplier 
         public long  serverTimestampTicks;
 
       }
@@ -109,17 +110,48 @@ public struct PlayerData
     [Serializable]
     public struct NewSessionData
     {
-        public string     sessionId;       // e.g. "20260422_153045_123"
+        public string     sessionId;           
         public string     playerId;
         public string     gameId;
-        public string     startTime;       // ISO-8601 string
+        public string     startTime;     
         public long       startTimeTicks;
-        public string     state;           // "active"
-        public GameConfig gameConfig;      // levels + multipliers from server
+        public string     state;               // "active" | "expired" add idle 
+        public GameConfig gameConfig;          // levels + multipliers from server
+        public int        currentLevelIndex;
+        public int        totalBallsSpent;
+        public int        ballsDroppedThisLevel;
+        public RewardRecord[] rewardHistory;
     }
-      
-  
-        
+
+    // Pre-calculated ball targets
+
+    
+    [Serializable]
+    public struct BallTarget
+    {
+        public int ballIndex;   
+        public int bucketIndex; 
+    }
+
+    
+    [Serializable]
+    public struct LevelBallData
+    {
+        public string      sessionId;
+        public int         levelIndex;
+        public int         ballCount;
+        public float       betPerBall;
+        public BallTarget[] targets;
+    }
+
+   
+    [Serializable]
+    public struct BallBatchResult
+    {
+        public int           totalPayout;
+        public double        newBalance;
+        public RewardRecord[] rewards;
+    }
  }
 
         

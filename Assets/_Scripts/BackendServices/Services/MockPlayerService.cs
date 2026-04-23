@@ -59,19 +59,7 @@ namespace ProgressiveP.Backend
             }
         }
 
-        public async Task<BackendResult<bool>> SavePlayerAsync(BackendData playerData)
-        {
-            // Placeholder for implementation
-            await _network.SimulateAsync();
-            return BackendResult<bool>.Success(true);
-        }
-
-        public async Task<BackendResult<bool>> UpdateCoinsAsync(string userId, double coins)
-        {
-            // Placeholder for implementation
-            await _network.SimulateAsync();
-            return BackendResult<bool>.Success(true);
-        }
+        
     }
 
 

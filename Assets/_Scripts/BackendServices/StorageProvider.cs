@@ -2,7 +2,6 @@ using UnityEngine;
 using System.IO;
 using System.Collections.Generic;
 using Newtonsoft.Json;
-using UnityEditor.VersionControl;
 
 namespace ProgressiveP.Backend
 {
@@ -13,11 +12,11 @@ namespace ProgressiveP.Backend
     // Assets/Resources/Data/Games/{gameId}/games{id}.json - game and level definitions
     
     // WRITABLE 
-    //  Assets/Resources/Data/Players/{playerId}.json - profile, balance, game list
+    //  ../Data/Players/{playerId}.json - profile, balance, game list
   
     //GAME HISTORY
-    // Assets/Resources/Data/PlayersGameData/{playerId}/{gameId}/{gameSessionId}.json - session history and data
-    // Assets/Resources/Data/PlayersGameData/{playerId}/{gameId}/summary.json - aggregate stats
+    // ../Data/PlayersGameData/{playerId}/{gameId}/{gameSessionId}.json - session history and data
+    // ../Data/PlayersGameData/{playerId}/{gameId}/summary.json - aggregate stats
 
 
 
@@ -25,7 +24,7 @@ namespace ProgressiveP.Backend
     private static string PlayersRoot=> Path.Combine(PersistentRoot, "Players");
     private static string PlayerGameDataRoot =>Path.Combine(PersistentRoot, "PlayersGameData");
 
-    private static string GamesResourceRoot => "Games"; 
+    private static string GamesResourceRoot => "Data/Games"; 
 
     public static bool LoadGameGlobalConfig(string gameId, out string config)
      {
@@ -42,10 +41,10 @@ namespace ProgressiveP.Backend
     
      public static bool LoadGame(string gameId, out string config, string gameVersion = "1")
      {
-           var asset = Resources.Load<TextAsset>($"{GamesResourceRoot}/{gameId}/game{gameVersion}");
+           var asset = Resources.Load<TextAsset>($"{GamesResourceRoot}/{gameId}/levels");
             if (asset == null)
             {
-                Debug.LogWarning($"[Storage] Missing: Resources/{GamesResourceRoot}/{gameId}/game{gameVersion}.json");
+                Debug.LogWarning($"[Storage] Missing: Resources/{GamesResourceRoot}/{gameId}/levels.json");
                 config = null;
                 return false;
             }
@@ -109,7 +108,7 @@ namespace ProgressiveP.Backend
 
 
 
-     public static string CreatePlayer(string playerId)
+     public static string CreatePlayer(string playerId, int initialBalance = 0)
      {
          try
             {
@@ -122,7 +121,7 @@ namespace ProgressiveP.Backend
                 {
                     { "userId", playerId },
                     { "name", "Player" },
-                    { "balance", 0 },
+                    { "balance", initialBalance },
                     { "games", new List<object>() }
                 };
 
@@ -150,11 +149,7 @@ namespace ProgressiveP.Backend
         Debug.Log($"Player data saved to: {path}");
     }
 
-    /// <summary>
-    /// Writes a session document to:
-    ///   {persistentDataPath}/Data/PlayersGameData/{playerId}/{gameId}/{sessionId}.json
-    /// The sessionId is the formatted UTC start time so the filename is human-readable.
-    /// </summary>
+  
     public static void SavePlayerGameSession(string playerId, string gameId, string sessionId, string jsonData)
     {
         string dir = Path.Combine(PlayerGameDataRoot, playerId, gameId);
@@ -163,8 +158,20 @@ namespace ProgressiveP.Backend
         File.WriteAllText(path, jsonData);
         Debug.Log($"[Storage] Session saved: {path}");
     }
-        
-     
+
+   
+    public static bool LoadPlayerGameSessionFile(string playerId, string gameId, string sessionId, out string data)
+    {
+        string path = Path.Combine(PlayerGameDataRoot, playerId, gameId, $"{sessionId}.json");
+        if (File.Exists(path))
+        {
+            data = File.ReadAllText(path);
+            return true;
+        }
+        Debug.LogWarning($"[Storage] Session file not found: {path}");
+        data = null;
+        return false;
+    }
     }
 }
 

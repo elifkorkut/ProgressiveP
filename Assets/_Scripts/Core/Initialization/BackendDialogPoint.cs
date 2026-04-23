@@ -8,11 +8,18 @@ namespace ProgressiveP.Core
 {
     public static class BackendDialogPoint 
     {
-        public static void AddOpenedGame(string gameId)
+    
+        public static async Task LoadPlayer(
+            string playerId,
+            System.Action<string>      onError,
+            System.Action<string>      onSuccess)
         {
-            
+            await MockServices.Instance.AuthenticatePlayerAsync(
+                playerId,
+                onError:   onError,
+                onSuccess: data => onSuccess?.Invoke(data.value));
         }
-
+       
         public static async Task GetNewGame(string gameId, string playerId)
         {
             if (string.IsNullOrEmpty(playerId))
@@ -71,25 +78,82 @@ namespace ProgressiveP.Core
             return result;
         }
 
-        public static void GetActiveGame(string gameId, string sessionId)
+                 
+        public static async Task ActivateSession(
+            string playerId, string gameId, string sessionId,
+            System.Action<string> onError,
+            System.Action         onSuccess)
         {
-            
+            await MockServices.Instance.ActivateSessionAsync(
+                playerId, gameId, sessionId,
+                onError: onError,
+                onSuccess: _ => onSuccess?.Invoke());
         }
 
-         public static void SaveClosedGame(string gameId)
+        
+        public static async Task ValidateActiveSession(
+            string playerId, string gameId, string sessionId,
+            System.Action               onExpired,
+            System.Action<NewSessionData> onValid)
         {
-            
+            await MockServices.Instance.ValidateActiveSessionAsync(
+                playerId, gameId, sessionId,
+                onError: _ => onExpired?.Invoke(),
+                onSuccess: data =>
+                {
+                    var session = DataReader.LoadNewSessionData(data.value);
+                    if (session.HasValue) onValid?.Invoke(session.Value);
+                    else                 onExpired?.Invoke();
+                });
         }
 
-         public static void LoadClosedGame(string gameId, string sessionId)
-         {
-             
-         }
+        
+        public static async Task GetLevelBallTargets(
+            string playerId, string gameId, string sessionId,
+            int    levelIndex, int ballCount, float betPerBall,
+            System.Action<string>        onError,
+            System.Action<LevelBallData> onSuccess)
+        {
+            await MockServices.Instance.GetLevelBallTargetsAsync(
+                playerId, gameId, sessionId, levelIndex, ballCount, betPerBall,
+                onError: onError,
+                onSuccess: data =>
+                {
+                    var parsed = DataReader.LoadLevelBallData(data.value);
+                    if (parsed.HasValue) onSuccess?.Invoke(parsed.Value);
+                    else                 onError?.Invoke("Failed to parse LevelBallData.");
+                });
+        }
 
-         public static void SetGameConfig(string sessionId, Dictionary<string, object> data)
-         {
-             
-         }
+      
+        public static async Task SendBallBatch(
+            string playerId, string gameId, string sessionId,
+            int    levelIndex, int[] ballIndices, float betPerBall,
+            System.Action<string>          onError,
+            System.Action<BallBatchResult> onSuccess)
+        {
+            await MockServices.Instance.ProcessBallBatchAsync(
+                playerId, gameId, sessionId, levelIndex, ballIndices, betPerBall,
+                onError: onError,
+                onSuccess: data =>
+                {
+                    var parsed = DataReader.LoadBallBatchResult(data.value);
+                    if (parsed.HasValue) onSuccess?.Invoke(parsed.Value);
+                    else                 onError?.Invoke("Failed to parse BallBatchResult.");
+                });
+        }
+
+            public static async Task UpdateSessionLevel(
+            string playerId, string gameId, string sessionId,
+            int    newLevelIndex,
+            System.Action<string> onError,
+            System.Action         onSuccess)
+        {
+            await MockServices.Instance.UpdateSessionLevelAsync(
+                playerId, gameId, sessionId, newLevelIndex,
+                onError: onError,
+                onSuccess: _ => onSuccess?.Invoke());
+        }
     }
 
 }

@@ -2,7 +2,7 @@ using UnityEngine;
 
 namespace ProgressiveP.Logic.Effects
 {
-[DefaultExecutionOrder(-80)]
+
 public class SoundManager : MonoBehaviour
 {
     public static SoundManager Instance { get; private set; }
